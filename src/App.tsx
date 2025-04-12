@@ -1,4 +1,4 @@
-import { TextInput } from "@/components/Input/TextInput"
+import { TextInput } from "@/components/Sample/TextInput"
 import { TestComponent } from "@/components/TestComponent"
 import { useState } from "react"
 import viteLogo from "/vite.svg"

@@ -119,5 +119,288 @@ npm run test src/__tests__/FizzBuzz.test.tsx
 
 つまり、まずは実装に直接影響する重要なロジックを確実にカバーできるよう、テストしやすい部分からテストを作成し、徐々に他の部分のテストを追加していくというアプローチを示しています。
 
+"それ以外の数字を入力したら、そのまま出力エリアに表示する" を describe で囲むと、テストケースが増えていくので、テストケースを分けます。
+```ts
+describe("それ以外の数字を入力したら、そのまま出力エリアに表示する", () => {
+    // テストケース
+    it.todo("1 を入力したら、出力エリアに '1' を表示する")
+    it.todo("2 を入力したら、出力エリアに '2' を表示する")
+    it.todo("4 を入力したら、出力エリアに '4' を表示する")
+    it.todo("7 を入力したら、出力エリアに '7' を表示する")
+    it.todo("11 を入力したら、出力エリアに '11' を表示する")
+})
+```
+
+テストの assertion を書いていきます。
+```ts
+it("1 を入力したら、出力エリアに '1' を表示する", () => {
+    // テストケースの assertion
+    expect(1).toBe(1)
+})
+```
+
+### テストの実行
+
+ユニットテストの場合、シンプルに関数の実行になります。その関数の戻り値が測定され、検証されます。
+しかし、UI を伴うテストは、**実行は入力エリアに数字を入力する**ことになります。
+
+そして、戻り値に相当するものが出力エリアに表示される文字列です。これを測定し、検証します。その上でアサーションを書き直します。
+
+```ts
+it("1 を入力したら、出力エリアに '1' を表示する", () => {
+	// 実行(act)
+	fireEvent.change(inputElement, { target: { value: "1" } })
+	// 検証(assertion)
+	expect(1).toBe(1)
+})
+```
+
+ここからテスト対象となる実装ファイルを用意します。
+
+```tsx
+export const FizzBuzz = () => {
+	return (
+		<div>
+			<div></div>
+		</div>
+	)
+}
+```
+
+この状態で、テストファイルに入力エリアと出力エリアの要素を取得する処理を追加します。
+
+```tsx
+it("1 を入力したら、出力エリアに '1' を表示する", () => {
+	// 準備（arrange）
+	const { getByTestId } = render(<FizzBuzz />)
+	const inputElement = getByTestId("input") // `data-testid="input"` の要素を取得
+	const outputElement = getByTestId("output") // `data-testid="output"` の要素を取得
+	// 実行(act)
+	fireEvent.change(inputElement, { target: { value: "1" } })
+	// 検証(assertion)
+	expect(outputElement.textContent).toBe('1')
+})
+```
+
+このテストを実行すると、テストが失敗します。
+
+```bash
+ RERUN  src/components/Sample/FizzBuzz.tsx x11 
+        Filename pattern: src/__tests__/FizzBuzz.test.tsx
+
+ ❯ src/__tests__/FizzBuzz.test.tsx (9 tests | 1 failed | 8 skipped) 18ms
+   ↓ Fizz Buzz 問題の答えを表示する > 1 から 100 までの数字を入力する
+   ↓ Fizz Buzz 問題の答えを表示する > 入力エリアに 3 の倍数を入力したら、出力エリアに "Fizz" を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > 入力エリアに 5 の倍数を入力したら、出力エリアに "Buzz" を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > ただし、入力エリアに 3 と 5 の倍数を入力したら、出力エリアに "Fizz Buzz" を表示する
+   × Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 1 を入力したら、出力エリアに '1' を表示する 17ms
+     → Unable to find an element by: [data-testid="input"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      <div />
+    </div>
+  </div>
+</body>
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 2 を入力したら、出力エリアに '2' を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 4 を入力したら、出力エリアに '4' を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 7 を入力したら、出力エリアに '7' を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 11 を入力したら、出力エリアに '11' を表示する
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/FizzBuzz.test.tsx > Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 1 を入力したら、出力エリアに '1' を表示する
+TestingLibraryElementError: Unable to find an element by: [data-testid="input"]
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div>
+      <div />
+    </div>
+  </div>
+</body>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ getByTestId node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/__tests__/FizzBuzz.test.tsx:17:25
+     15|    // 準備（arrange）
+     16|    const { getByTestId } = render(<FizzBuzz />)
+     17|    const inputElement = getByTestId("input") // `data-testid="input"` の要素を取得
+       |                         ^
+     18|    const outputElement = getByTestId("output") // `data-testid="output"` の要素を取得
+     19|    // 実行(act)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
 
 
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 todo (9)
+   Start at  13:34:40
+   Duration  194ms
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+```
+
+これはステータス Red ですが、想定したとおりの失敗のため、このまま進めます。
+次は、テストに成功する処理の実装を行います。重要なのはテストに失敗し、それを成功させるということです。
+
+テストの失敗から、必要なことは
+- 入力エリアと出力エリアの要素を用意をする
+- 出力エリアに 「1」 を表示する
+
+これを実装します。
+
+```html
+<div>
+	<p>
+		入力:
+		<input type="number" data-testid="input" />
+	</p>
+	<p>
+		出力:<span data-testid="output">1</span>
+	</p>
+</div>
+```
+これで、テストを実行するとテストが成功します。
+
+```bash
+✓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 1 を入力したら、出力エリアに '1' を表示する 20ms
+
+...
+ Test Files  1 passed (1)
+      Tests  1 passed | 8 todo (9)
+...
+```
+
+### 三角測量のテストを書く
+テストは無事に成功しましたが、これは仮実装による成功です。
+
+ここから、実際の要求に近づけていきます。同じ仕様に対して、もう一つのテストケースを追加していくことを三角測量のテストといいます。
+
+```ts
+it.todo("2 を入力したら、出力エリアに '2' を表示する")
+```
+つまり、このテストをクリアするために、動的な入力値に対するテストを書き実装していきます。
+
+```ts
+it("2 を入力したら、出力エリアに '2' を表示する", () => {
+	// 準備（arrange）
+	const { getByTestId } = render(<FizzBuzz />)
+	const inputElement = getByTestId("input") // `data-testid="input"` の要素を取得
+	const outputElement = getByTestId("output") // `data-testid="output"` の要素を取得
+	// 実行(act)
+	fireEvent.change(inputElement, { target: { value: "2" } })
+	// 検証(assertion)
+	expect(outputElement.textContent).toBe("2")
+})
+```
+
+このテストを実行すると、テストが失敗します。
+
+```bash
+ RERUN  src/__tests__/FizzBuzz.test.tsx x15 
+        Filename pattern: src/__tests__/FizzBuzz.test.tsx
+
+ ❯ src/__tests__/FizzBuzz.test.tsx (9 tests | 1 failed | 7 skipped) 25ms
+   ↓ Fizz Buzz 問題の答えを表示する > 1 から 100 までの数字を入力する
+   ↓ Fizz Buzz 問題の答えを表示する > 入力エリアに 3 の倍数を入力したら、出力エリアに "Fizz" を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > 入力エリアに 5 の倍数を入力したら、出力エリアに "Buzz" を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > ただし、入力エリアに 3 と 5 の倍数を入力したら、出力エリアに "Fizz Buzz" を表示する
+   ✓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 1 を入力したら、出力エリアに '1' を表示する 15ms
+   × Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 2 を入力したら、出力エリアに '2' を表示する 9ms
+     → expected '1' to be '2' // Object.is equality
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 4 を入力したら、出力エリアに '4' を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 7 を入力したら、出力エリアに '7' を表示する
+   ↓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 11 を入力したら、出力エリアに '11' を表示する
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/FizzBuzz.test.tsx > Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 2 を入力したら、出力エリアに '2' を表示する
+AssertionError: expected '1' to be '2' // Object.is equality
+
+Expected: "2"
+Received: "1"
+
+ ❯ src/__tests__/FizzBuzz.test.tsx:32:38
+     30|    fireEvent.change(inputElement, { target: { value: "2" } })
+     31|    // 検証(assertion)
+     32|    expect(outputElement.textContent).toBe("2")
+       |                                      ^
+     33|   })
+     34|   it.todo("4 を入力したら、出力エリアに '4' を表示する")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 7 todo (9)
+   Start at  15:04:50
+   Duration  192ms
+
+ FAIL  Tests failed. Watching for file changes...
+```
+
+再び、Red になったため、正しい実装をして、テストを成功させましょう。
+
+```tsx
+const [num, setNum] = useState("")
+
+const convertFizzBuzz = (e: React.ChangeEvent<HTMLInputElement>) => {
+	setNum(e.target.value)
+}
+return (
+	<div>
+		<p>
+			入力:
+			<input
+				type="number"
+				data-testid="input"
+				onChange={convertFizzBuzz}
+			/>
+		</p>
+		<p>
+			出力:<span data-testid="output">{num}</span>
+		</p>
+	</div>
+)
+```
+
+これで、テストが成功します。
+
+```bash
+   ✓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 1 を入力したら、出力エリアに '1' を表示する 24ms
+   ✓ Fizz Buzz 問題の答えを表示する > それ以外の数字を入力したら、そのまま出力エリアに表示する > 2 を入力したら、出力エリアに '2' を表示する 4ms
+```
+
+これで、ステータスは Green になりました。
+
+:::warning
+
+実際に正しい実装になっているかは分かりません。これはあくまでテストが通る実装であることを確認できただけだからです。
+
+しかし、仕様書をベースとしたテストコードに対して実装を書くことで、テストコードが仕様を満たしていることを確認できます。**テストを成功させるためのテストではなく、テストを成功させるための実装**を書いていることが重要です。
+
+テストコードを変更することは仕様を変更することです。つまり、テストに失敗するからといって、実装のコードを変えてはいけません。
+:::
+
+
+### リファクタリング
+
+実装のリファクタリングをしていきます。一般的にリファクタリングというと、外部からみた動作を変えずに内部の構造を整理することです。
+しかし、**TDD におけるリファクタリングでは、成功しているテストが成功するまま**で、実装のコードを書き換えることを指します。
+
+リファクタリングにはメリットともにリスクが伴います。それは、現在動作しているものが動かなくなる可能性です。
+**テストが成功し続けているうちは、その動作は保証**されます。
+
+これにより、安全性を得ることができ、大胆かつ積極的にリファクタリングすることができます。
+
+> FizzBuzz のリファクタリングを行います。
+
+```tsx
+
+```
