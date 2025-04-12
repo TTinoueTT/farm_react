@@ -9,7 +9,15 @@ export const FizzBuzz = () => {
 		if (value === "" || Number(value) < 1 || Number(value) > 100) {
 			setOutput("1~100 の数字を入力してください。")
 		} else {
-			setOutput(value)
+			if (Number(value) % 3 === 0 && Number(value) % 5 === 0) {
+				setOutput("Fizz Buzz")
+			} else if (Number(value) % 3 === 0) {
+				setOutput("Fizz")
+			} else if (Number(value) % 5 === 0) {
+				setOutput("Buzz")
+			} else {
+				setOutput(value)
+			}
 		}
 	}
 	return (
