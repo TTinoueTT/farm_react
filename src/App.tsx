@@ -1,7 +1,8 @@
+import { TextInput } from "@/components/Input/TextInput"
+import { TestComponent } from "@/components/TestComponent"
 import { useState } from "react"
 import viteLogo from "/vite.svg"
 import reactLogo from "./assets/react.svg"
-import { TestComponent } from "./components/TestComponent"
 import "./App.css"
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
 
 			<h1>Vite + React</h1>
 			<TestComponent />
+			<TextInput />
 			<div className="card">
 				<button
 					onClick={() => setCount((count) => count + 1)}

@@ -5,17 +5,8 @@
 	"files": {
 		"ignoreUnknown": false,
 		"include": [
-			"src/**/*.ts",
-			"src/**/*.tsx",
-			"src/**/*.js",
-			"src/**/*.jsx",
-			"src/**/*.css",
-			"src/**/*.scss",
-			"src/**/*.md",
-			"src/**/*.mdx",
-			"src/**/*.json",
-			"src/**/*.json5",
-			"src/**/*.jsonc",
+			"**/*.{ts,tsx,js,jsx,css,scss,md,mdx,json,json5,jsonc}",
+			"src/**/**/*.tsx",
 			"eslint.config.js"
 		],
 		"ignore": [
