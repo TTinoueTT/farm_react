@@ -437,3 +437,34 @@ beforeEach(() => {
 変わらず、テストが成功したままです。
 
 ### 二つ目の仕様のテストを書く
+
+次は "1 から 100 までの数字を入力する" をテストしましょう。
+
+```tsx
+describe("1 から 100 までの数字を入力する", () => {
+	// テストケース
+	it("無効な数字（例:0）を入力した場合、出力エリアにも '1~100 の数字を入力してください。' と表示される", () => {
+		// 実行(act)
+		fireEvent.change(inputElement, { target: { value: "0" } })
+		// 検証(assertion)
+		console.log(outputElement.textContent)
+		expect(outputElement.textContent).toBe(
+			"1~100 の数字を入力してください。"
+		)
+	})
+	it("無効な数字（例:101）を入力した場合、出力エリアにも '1~100 の数字を入力してください。' と表示される", () => {
+		// 実行(act)
+		fireEvent.change(inputElement, { target: { value: "101" } })
+		// 検証(assertion)
+		expect(outputElement.textContent).toBe(
+			"1~100 の数字を入力してください。"
+		)
+	})
+	it("有効な数字(例:50)を入力した場合、バリデーションメッセージがクリアされ、出力エリアに '50' を表示する", () => {
+		// 実行(act)
+		fireEvent.change(inputElement, { target: { value: "50" } })
+		// 検証(assertion)
+		expect(outputElement.textContent).toBe("50")
+	})
+})
+```
