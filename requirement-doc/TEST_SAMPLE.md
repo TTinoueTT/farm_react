@@ -358,7 +358,7 @@ return (
 		<p>
 			入力:
 			<input
-				type="number"
+				type="text"
 				data-testid="input"
 				onChange={convertFizzBuzz}
 			/>
@@ -402,5 +402,38 @@ return (
 > FizzBuzz のリファクタリングを行います。
 
 ```tsx
-
+<input
+	type="number"  // text ではなく number であるべき
+	data-testid="input"
+	onChange={convertFizzBuzz}
+/>
 ```
+
+まだ、Green のままで、実装をリファクタリングすることができた。
+テストコードのリファクタリングを行います。
+
+```ts
+const { getByTestId } = render(<FizzBuzz />)
+const inputElement = getByTestId("input")
+const outputElement = getByTestId("output")
+```
+
+の部分が重複しているので、beforeEach で各テストの実行前に毎回実行するようにします。
+
+
+```ts
+// 前準備（arrange）
+let inputElement: HTMLElement
+let outputElement: HTMLElement
+beforeEach(() => {
+	const { getByTestId } = render(<FizzBuzz />)
+	inputElement = getByTestId("input")
+	outputElement = getByTestId("output")
+})
+
+// describe("それ以外の数字を入力したら、そのまま出力エリアに表示する", の直前に書く
+```
+
+変わらず、テストが成功したままです。
+
+### 二つ目の仕様のテストを書く
