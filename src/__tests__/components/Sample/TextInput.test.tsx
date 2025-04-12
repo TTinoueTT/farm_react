@@ -1,6 +1,6 @@
+import { TextInput } from "@/components/Sample/TextInput"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { TextInput } from "./TextInput"
 
 test("TextInput Component test", () => {
 	render(<TextInput />)
