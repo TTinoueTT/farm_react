@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	base: "./", 
+	base: "./",
 	root: ".", // index.html があるディレクトリ
 	plugins: [react()],
 	publicDir: resolve(__dirname, "public"),

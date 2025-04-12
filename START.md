@@ -76,7 +76,17 @@ brew install biome
 biome の設定ファイルは `biome.config.ts` と `biome.json` の2つが作成されます。
 :::
 
+## Vitest 導入
 
+1. プロジェクトに vitest をインストール
+```bash
+npm install -D vitest happy-dom @vitest/coverage-v8 @testing-library/react @testing-library/user-event @testing-library/jest-dom
+```
+
+2. vite.config.ts の設定
+```bash
+npm install -D vite-tsconfig-paths
+```
 
 
 
