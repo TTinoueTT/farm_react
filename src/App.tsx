@@ -1,3 +1,4 @@
+// import { TelInput } from "@/components/01_Atoms/v1/default/TelInput/TelInput"
 // import { Label } from "@/components/01_Atoms/v1/default/Label/Label"
 import { TextInput } from "@/components/01_Atoms/v1/default/TextInput/TextInput"
 import { TestComponent } from "@/components/TestComponent"
@@ -61,6 +62,12 @@ function App() {
 						placeholder="テキストを入力"
 						required
 					/>
+					{/* <TelInput
+						id="telInput"
+						name="telInput"
+						placeholder="電話番号を入力"
+						required
+					/> */}
 				</div>
 			</div>
 

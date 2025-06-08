@@ -1,4 +1,4 @@
-import { FizzBuzz } from "@/components/Sample/FizzBuzz"
+import { FizzBuzz } from "@/components/00_Sample/FizzBuzz"
 import { fireEvent, render } from "@testing-library/react"
 // 要件
 describe("Fizz Buzz 問題の答えを表示する", () => {
