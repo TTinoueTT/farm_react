@@ -1,0 +1,32 @@
+/* src/components/01_Atoms/Label/Label.module.css */
+.label {
+    font-size: 14px;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+}
+
+.error {
+    color: #d00;
+}
+
+.required {
+    /* variant 用の調整はここに */
+}
+
+.requiredMark {
+    color: #d00;
+    margin-left: 2px;
+}
+
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
